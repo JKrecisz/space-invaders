@@ -4,8 +4,11 @@ icon_image = 'images/icon.png'
 # Background
 background_image = 'images/background.png'
 
-# Ship
-ship_image = 'images/ship.png'
+# PLayer
+player_image = 'images/player.png'
+player_lives = 5
+player_speed = 5
+player_level = 1
 
 # Alien
 alien_image = ['images/alien1.png',
@@ -14,10 +17,18 @@ alien_image = ['images/alien1.png',
                'images/alien4.png',
                'images/alien5.png']
 
+# Bullet
+bullet_image = 'images/bullet.png'
 
 # Caption
 caption = 'Space-invaders by @JKrecisz'
 
-# frames per second (FPS)
+# Screen - if full_screen == True, then width, height not work
+width = 1100
+height = 600
+full_screen = False
 fps = 60
+
+
+
 
