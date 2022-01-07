@@ -7,7 +7,7 @@ pygame.mouse.set_visible(False)
 clock = pygame.time.Clock()
 
 # Screen setup
-screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+screen = pygame.display.set_mode(800, 600)
 pygame.display.set_caption(settings.caption)
 background = pygame.image.load(settings.background_image)
 pygame.display.set_icon(pygame.image.load(settings.icon_image))
