@@ -9,8 +9,11 @@ player_image = 'images/player.png'
 player_lives = 5
 player_speed = 5
 player_level = 1
+laser_speed = 4
 
 # Alien
+alien_speed = 1
+wave_len = 5
 alien_image = ['images/alien1.png',
                'images/alien2.png',
                'images/alien3.png',

@@ -1,15 +1,20 @@
-import pygame
-import os
 import time
+
+import pygame
 import random
 import settings
 
+# font init for labels
 pygame.font.init()
 
+# screen setup
 if settings.full_screen:
     screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 else:
     screen = pygame.display.set_mode((settings.width, settings.height))
+
+screen_width = screen.get_width()
+screen_height = screen.get_height()
 
 # Setting caption and icon
 pygame.display.set_caption(settings.caption)
@@ -29,7 +34,7 @@ BACKGROUND_IMAGE = pygame.transform.scale(pygame.image.load(settings.background_
 
 class Laser:
     def __init__(self, x, y, image):
-        self.x = x
+        self.x = x + 25
         self.y = y
         self.image = image
         self.mask = pygame.mask.from_surface(self.image)
@@ -44,7 +49,7 @@ class Laser:
         return not (height >= self.y >= 0)
 
     def collision(self, obj):
-        return collide(obj, self)
+        return collide(self, obj)
 
 
 class Object:
@@ -104,14 +109,27 @@ class Player(Object):
             else:
                 for obj in objs:
                     if laser.collision(obj):
-                        obj.health -= 10
-                        self.lasers.remove(laser)
+                        objs.remove(obj)
+                        if laser in self.lasers:
+                            self.lasers.remove(laser)
 
     def get_width(self):
         return self.obj_image.get_width()
 
     def get_height(self):
         return self.obj_image.get_height()
+
+    def draw(self, window):
+        super().draw(window)
+        self.health_bar(window)
+
+    def health_bar(self, window):
+        pygame.draw.rect(window, (255, 0, 0),
+                         (self.x, self.y + self.obj_image.get_height() + 10, self.obj_image.get_width(), 10))
+        pygame.draw.rect(window, (0, 255, 0), (
+            self.x, self.y + self.obj_image.get_height() + 10,
+            self.obj_image.get_width() * (self.health / self.max_health),
+            10))
 
 
 class Alien(Object):
@@ -131,6 +149,12 @@ class Alien(Object):
     def move(self, speed):
         self.y += speed
 
+    def shoot(self):
+        if self.cool_down_counter == 0:
+            laser = Laser(self.x - 20, self.y, self.laser_image)
+            self.lasers.append(laser)
+            self.cool_down_counter = 1
+
     def get_width(self):
         return self.obj_image.get_width()
 
@@ -141,31 +165,29 @@ class Alien(Object):
 def collide(obj1, obj2):
     offset_x = obj2.x - obj1.x
     offset_y = obj2.y - obj1.y
-    return obj1.mask.overlap_mask(obj2, (offset_x, offset_y)) is not None
+    return obj1.mask.overlap(obj2.mask, (offset_x, offset_y)) is not None
 
 
 def main():
     run = True
     FPS = settings.fps
 
-    # level = settings.player_level
-    level = 0
-    lives = settings.player_lives
-    player_speed = settings.player_speed
-    laser_speed = 4
+    laser_speed = settings.laser_speed
     main_font = pygame.font.SysFont("comics", 50)
     lost_font = pygame.font.SysFont("comics", 65)
-    screen_width = screen.get_width()
-    screen_height = screen.get_height()
+
     lost = False
     lost_count = 0
 
     # Creating aliens
     aliens = []
-    wave_length = 5
-    alien_speed = 1
+    wave_length = settings.wave_len
+    alien_speed = settings.alien_speed
 
     # creating a player
+    level = settings.player_level - 1
+    lives = settings.player_lives
+    player_speed = settings.player_speed
     player = Player(screen_width / 2, screen_height * 3 / 4)
 
     clock = pygame.time.Clock()
@@ -176,16 +198,18 @@ def main():
         # Draw text
         level_label = main_font.render(f'Level: {level}', 1, (255, 255, 255))
         lives_label = main_font.render(f'Lives: {lives}', 1, (255, 255, 255))
+
         screen.blit(lives_label, (10, 10))
         screen.blit(level_label, (screen_width - level_label.get_width() - 10, 10))
 
         # Draw aliens
-        for alien in aliens:
-            Alien.draw(alien, screen)
+        for each in aliens:
+            Alien.draw(each, screen)
 
         # Draw player
         player.draw(screen)
 
+        # If lost
         if lost:
             lost_label = lost_font.render('You lost!!', 1, (255, 255, 255))
             screen.blit(lost_label, (screen_width / 2 - lost_label.get_width() / 2, screen_height / 2))
@@ -195,6 +219,8 @@ def main():
     while run:
         clock.tick(FPS)
         redraw_screen()
+
+        # If lost
         if lives <= 0 or player.health <= 0:
             lost = True
             lost_count += 1
@@ -205,6 +231,7 @@ def main():
             else:
                 continue
 
+        # Next wave
         if len(aliens) == 0:
             level += 1
             wave_length += 5
@@ -215,7 +242,7 @@ def main():
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                run = False
+                quit()
 
         # Checking all keys
         keys = pygame.key.get_pressed()
@@ -236,11 +263,46 @@ def main():
         for alien in aliens[:]:
             alien.move(alien_speed)
             alien.move_lasers(laser_speed, player)
-            if alien.y + alien.get_height() > screen_height:
+
+            if random.randrange(0, 2 * 60) == 1:
+                alien.shoot()
+
+            # collide player with alien
+            if collide(alien, player):
+                player.health -= 10
+                aliens.remove(alien)
+            elif alien.y + alien.get_height() > screen_height:
                 lives -= 1
                 aliens.remove(alien)
+
         player.move_lasers(-laser_speed, aliens)
 
 
+def main_menu():
+    title_font = pygame.font.SysFont("comicsans", 70)
+    quit_font = pygame.font.SysFont("comics", 40)
+    run = True
+    while run:
+        screen.blit(BACKGROUND_IMAGE, (0, 0))
+        title_label = title_font.render("Press space bar to begin!", 1, (255, 255, 255))
+        screen.blit(title_label, (screen_width / 2 - title_label.get_width() / 2, 350))
+        quit_label = quit_font.render("Press Q button to close", 1, (255, 255, 255))
+        screen.blit(quit_label, (screen_width / 2 - quit_label.get_width() / 2, 400))
+        pygame.display.update()
+
+        keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_q]:
+            run = False
+        elif keys[pygame.K_SPACE]:
+            main()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+
+    pygame.quit()
+
+
 if __name__ == '__main__':
-    main()
+    main_menu()
