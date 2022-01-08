@@ -26,8 +26,7 @@ ALIEN_IMAGE3 = pygame.image.load(settings.alien_image[2])
 ALIEN_IMAGE4 = pygame.image.load(settings.alien_image[3])
 ALIEN_IMAGE5 = pygame.image.load(settings.alien_image[4])
 BULLET_IMAGE = pygame.image.load(settings.bullet_image)
-BACKGROUND_IMAGE = pygame.transform.scale(pygame.image.load(settings.background_image),
-                                          (screen.get_width(), screen.get_height()))
+BACKGROUND_IMAGE = pygame.image.load(settings.background_image)
 
 
 class Laser:
