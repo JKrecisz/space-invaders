@@ -1,5 +1,3 @@
-import time
-
 import pygame
 import random
 import settings
@@ -151,7 +149,7 @@ class Alien(Object):
 
     def shoot(self):
         if self.cool_down_counter == 0:
-            laser = Laser(self.x - 20, self.y, self.laser_image)
+            laser = Laser(self.x, self.y, self.laser_image)
             self.lasers.append(laser)
             self.cool_down_counter = 1
 
@@ -174,6 +172,7 @@ def main():
 
     laser_speed = settings.laser_speed
     main_font = pygame.font.SysFont("comics", 50)
+    esc_font = pygame.font.SysFont("comics", 30)
     lost_font = pygame.font.SysFont("comics", 65)
 
     lost = False
@@ -198,8 +197,10 @@ def main():
         # Draw text
         level_label = main_font.render(f'Level: {level}', 1, (255, 255, 255))
         lives_label = main_font.render(f'Lives: {lives}', 1, (255, 255, 255))
+        escape_label = esc_font.render('Press ESC to go back', 1, (255, 255, 255))
 
-        screen.blit(lives_label, (10, 10))
+        screen.blit(lives_label, (10, 20 + escape_label.get_height()))
+        screen.blit(escape_label, (10, 10))
         screen.blit(level_label, (screen_width - level_label.get_width() - 10, 10))
 
         # Draw aliens
@@ -236,7 +237,7 @@ def main():
             level += 1
             wave_length += 5
             for i in range(wave_length):
-                alien = Alien(random.randrange(50, screen_width - 50 - 64), random.randrange(-1500, -100),
+                alien = Alien(random.randrange(50, screen_width - 50 - 64), random.randrange(-1500*settings.frequency, -100),
                               random.randint(1, 5))
                 aliens.append(alien)
 
@@ -264,7 +265,7 @@ def main():
             alien.move(alien_speed)
             alien.move_lasers(laser_speed, player)
 
-            if random.randrange(0, 2 * 60) == 1:
+            if random.randrange(0, 2 * FPS) == 1:
                 alien.shoot()
 
             # collide player with alien
@@ -285,9 +286,9 @@ def main_menu():
     while run:
         screen.blit(BACKGROUND_IMAGE, (0, 0))
         title_label = title_font.render("Press space bar to begin!", 1, (255, 255, 255))
-        screen.blit(title_label, (screen_width / 2 - title_label.get_width() / 2, 350))
+        screen.blit(title_label, (screen_width / 2 - title_label.get_width() / 2, screen_height*7/12))
         quit_label = quit_font.render("Press Q button to close", 1, (255, 255, 255))
-        screen.blit(quit_label, (screen_width / 2 - quit_label.get_width() / 2, 400))
+        screen.blit(quit_label, (screen_width / 2 - quit_label.get_width() / 2, screen_height*7/10))
         pygame.display.update()
 
         keys = pygame.key.get_pressed()

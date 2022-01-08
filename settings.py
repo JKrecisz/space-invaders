@@ -14,6 +14,7 @@ laser_speed = 4
 # Alien
 alien_speed = 1
 wave_len = 5
+frequency = 1  # mean frequency of displayed aliens
 alien_image = ['images/alien1.png',
                'images/alien2.png',
                'images/alien3.png',
@@ -29,9 +30,5 @@ caption = 'Space-invaders by @JKrecisz'
 # Screen - if full_screen == True, then width, height not work
 width = 1100
 height = 600
-full_screen = False
+full_screen = True
 fps = 60
-
-
-
-
