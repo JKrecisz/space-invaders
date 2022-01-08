@@ -167,7 +167,7 @@ def collide(obj1, obj2):
 
 
 def main():
-    run = True
+    running = True
     FPS = settings.fps
 
     laser_speed = settings.laser_speed
@@ -217,7 +217,7 @@ def main():
 
         pygame.display.update()
 
-    while run:
+    while running:
         clock.tick(FPS)
         redraw_screen()
 
@@ -227,15 +227,15 @@ def main():
             lost_count += 1
 
         if lost:
-            if lost_count > FPS * 5:
-                run = False
+            if lost_count > FPS * settings.lost_time:
+                running = False
             else:
                 continue
 
         # Next wave
         if len(aliens) == 0:
             level += 1
-            wave_length += 5
+            wave_length += settings.wave_size
             for i in range(wave_length):
                 alien = Alien(random.randrange(50, screen_width - 50 - 64), random.randrange(-1500*settings.frequency, -100),
                               random.randint(1, 5))
@@ -249,7 +249,7 @@ def main():
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_ESCAPE]:
-            run = False
+            running = False
         if (keys[pygame.K_a] or keys[pygame.K_LEFT]) and player.x > 0:
             player.x -= player_speed
         if (keys[pygame.K_d] or keys[pygame.K_RIGHT]) and player.x + player.get_width() < screen_width:
