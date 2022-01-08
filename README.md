@@ -41,6 +41,6 @@ Finally run and enjoy!:
 ## First view at the game
 <img width="1400" alt="Inv-game" src="https://user-images.githubusercontent.com/93099511/148634083-2605ac39-ceb2-4558-8fc0-d74e8b6be47b.png">
 
-<img width="450" alt="Inv-menu" align="right" src="https://user-images.githubusercontent.com/93099511/148634089-d7548400-3e26-4b55-b4c8-69c3a87b01c3.png">
-<img width="450" alt="Inv-lost" align="left" src="https://user-images.githubusercontent.com/93099511/148634086-497251bf-5c79-4f7b-81a4-d0a646ed8567.png">
+<img width="400" alt="Inv-menu" align="right" src="https://user-images.githubusercontent.com/93099511/148634089-d7548400-3e26-4b55-b4c8-69c3a87b01c3.png">
+<img width="400" alt="Inv-lost" align="left" src="https://user-images.githubusercontent.com/93099511/148634086-497251bf-5c79-4f7b-81a4-d0a646ed8567.png">
 
