@@ -1,5 +1,6 @@
 # Space Invaders
-This is my second game based on the pygame module. This is just the beginning of my work, there will be updates in the following days.
+This is my second game based on the pygame module. The game is almost finished. The last thing left on me is collision check to destroy our aliens!
 
-# First view of the game
-<img width="1212" alt="Space-invaders" src="https://user-images.githubusercontent.com/93099511/148491033-68df64c3-d71b-4ab3-810c-02f885f00c19.png">
+# First view at the game
+<img width="1212" alt="Space-Invaders" src="https://user-images.githubusercontent.com/93099511/148631807-4d20c829-b5df-4bd1-862b-f04c130e269e.png">
+
