@@ -1,5 +1,13 @@
 # Space Invaders
-This is my second game based on the pygame module. The game is almost finished. The last thing left on me is collision check to destroy our aliens!
+This is my second game based on the pygame module.
+Game is ready to play, just download it and enjoy!
+
+#### Controls
+ - Ship Control - WSAD keys or keyboard arrows
+ - Shoot - Space bar
+ - Menu - ESC
+ - Quit - Q
+ 
 
 </br>
 
